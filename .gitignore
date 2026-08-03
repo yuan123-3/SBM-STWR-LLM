@@ -1,0 +1,48 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Data files (Excel, CSV, JSON data)
+*.xlsx
+*.xls
+*.csv
+*.json
+!china_provinces.geojson
+
+# Document drafts
+*.docx
+
+# Backup files
+*_backup.txt
+*_backup*
+
+# Model output figures and PDFs
+模型结果对比.png
+model_comparison.png
+model_comparison.pdf
+
+# Images output folder
+图片/
+
+# Natural Earth shapefiles (large, can download separately)
+ne_10m_admin_1_states_provinces/
+
+# Shortcuts
+*.lnk
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.local
+config.local.py
