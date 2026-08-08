@@ -4,9 +4,6 @@ __pycache__/
 *.pyo
 
 # Data files (Excel, CSV, JSON data)
-*.xlsx
-*.xls
-*.csv
 *.json
 !china_provinces.geojson
 
