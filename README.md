@@ -196,4 +196,4 @@ Data
 
 Agent mode is available as a sidebar toggle ("Agent-driven planning + numerical verification").
 
-> The result snapshot is shipped as `结果文件.zip` and is auto-extracted on first run (`结果文件/` is git-ignored).
+> The result snapshot (`结果文件/`) is **not shipped** in this repository. Generate it by running Steps 1-3 in the app, or place your own `结果文件/` (or a `结果文件.zip`, auto-extracted on first run) at the repo root. `结果文件/` and `结果文件.zip` are git-ignored.

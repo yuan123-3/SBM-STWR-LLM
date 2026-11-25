@@ -191,4 +191,4 @@ streamlit run app.py
 
 Agent 模式：侧边栏勾选 "Agent-driven planning + numerical verification"。
 
-> 结果快照以 `结果文件.zip` 形式提供，首次运行会自动解压（`结果文件/` 已被 .gitignore 忽略）。
+> 本仓库**不附带**结果快照（`结果文件/`）。请在应用内运行 Step1–3 生成，或自行放入 `结果文件/`（或 `结果文件.zip`，首次运行自动解压）。`结果文件/` 与 `结果文件.zip` 均已被 .gitignore 忽略。

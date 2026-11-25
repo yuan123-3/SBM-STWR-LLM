@@ -43,18 +43,33 @@ PATH_STATS = RES / "Path_Stats_Summary .csv"
 
 EVIDENCE_BUDGET = 200_000
 
-# ------------------------------------------------------------------ default snapshot
-sbm = pd.read_csv(SBM_PATH)                 # Region, Year, Efficiency, ...
-pm = pd.read_csv(PATH_MATRIX)               # ID, Path_*, DeltaEff_*
-ps = pd.read_csv(PATH_STATS)                # Path, Freq, Avg_Eff
-STWR = {}
-for d in sorted(STWR_DIR.iterdir()):
-    if d.is_dir() and d.name.isdigit():
-        STWR[int(d.name)] = (pd.read_csv(d / "stwr_params.csv"),
-                             pd.read_csv(d / "stwr_p-Values.csv"))
+# ------------------------------------------------------------------ default snapshot (OPTIONAL)
+# The repository does NOT ship the precomputed snapshot. If it is absent, the module
+# still imports: the app can then inject the user's own results via store_from_session().
+def _read_csv_safe(path, cols):
+    try:
+        if Path(path).exists():
+            return pd.read_csv(path)
+    except Exception:
+        pass
+    return pd.DataFrame(columns=cols)
 
-PROVINCES = sorted(sbm["Region"].unique().tolist())
-YEARS = sorted(int(y) for y in sbm["Year"].unique())
+
+sbm = _read_csv_safe(SBM_PATH, ["Region", "Year", "Efficiency"])
+pm = _read_csv_safe(PATH_MATRIX, ["ID"])
+ps = _read_csv_safe(PATH_STATS, ["Path", "Freq", "Avg_Eff"])
+STWR = {}
+if STWR_DIR.exists():
+    for d in sorted(STWR_DIR.iterdir()):
+        if d.is_dir() and d.name.isdigit():
+            try:
+                STWR[int(d.name)] = (pd.read_csv(d / "stwr_params.csv"),
+                                     pd.read_csv(d / "stwr_p-Values.csv"))
+            except Exception:
+                continue
+
+PROVINCES = sorted(sbm["Region"].unique().tolist()) if ("Region" in sbm.columns and not sbm.empty) else []
+YEARS = sorted(int(y) for y in sbm["Year"].unique()) if ("Year" in sbm.columns and not sbm.empty) else []
 INTENTS = ("numeric", "trend", "driver", "path", "policy", "comprehensive")
 
 _ALIASES = {"inner mongol": "Inner Mongolia", "xizang": "Xizang", "tibet": "Xizang"}
