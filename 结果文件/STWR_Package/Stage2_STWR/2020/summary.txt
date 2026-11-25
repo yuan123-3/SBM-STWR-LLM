@@ -1,0 +1,22 @@
+=== YEARLY MODEL SUMMARY (2020) ===
+
+[OLS]
+--- OLS Manual Summary ---
+AIC: 72.3775
+BIC: 79.5475
+R2: 0.5029
+
+Coefficients:
+Intercept      : -0.5468 (t: -1.6864, p: 0.1037)
+Industrial structure: -0.2021 (t: -1.0478, p: 0.3044)
+Urbanization rate: 0.9083 (t: 3.8607, p: 0.0007)
+Environmental regulation strength: 0.2334 (t: 0.4316, p: 0.6696)
+Energy structure: 0.8053 (t: 4.5921, p: 0.0001)
+
+
+[GWR]
+AICc=78.37210628379087, R2=0.6382632141270626
+
+
+[STWR]
+AICc=78.3721071268111, R2=0.6383

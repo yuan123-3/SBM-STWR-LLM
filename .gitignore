@@ -43,3 +43,6 @@ Thumbs.db
 .env
 .env.local
 config.local.py
+
+# Local secrets (never commit)
+local_secrets.py

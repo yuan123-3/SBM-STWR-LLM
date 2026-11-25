@@ -154,3 +154,44 @@ The app supports both **Chinese** and **English** province IDs. English names ar
 - Dominant factor per province-year (highest |coefficient| with p < threshold)
 - Adjacent-year transition matrix (e.g., `Industrial+ → Energy-`)
 - Frequency statistics + Sankey diagram visualization# SBM-STWR-LLM
+
+
+---
+
+## v2: RAG retrieval + Agent orchestration + numerical verification
+
+New modules
+- `retrieval.py` — fine-grained province/year retrieval, stable evidence IDs, JSON evidence serialization.
+- `agent_layer.py` — LLM planner (JSON task plan) + validated tool registry + executor.
+- `verification.py` — numerical claim extraction, deterministic verification, and answer repair.
+- `stwr_multislice.py` — correct multi-slice STWR (temporal kernel active).
+- `prompts.py` — retrieval/analysis/synthesis/output-contract prompts.
+
+Model / API key
+The QA pipeline uses DeepSeek-Chat (OpenAI-compatible API). The key is NOT stored in the repo.
+Provide it via environment variable, or create a git-ignored `local_secrets.py`:
+
+```bash
+export DEEPSEEK_API_KEY=your_key_here
+# optional:
+export DEEPSEEK_MODEL=deepseek-chat
+export DEEPSEEK_API_URL=https://api.deepseek.com/v1/chat/completions
+```
+
+`local_secrets.py` (git-ignored):
+```python
+DEEPSEEK_API_KEY = "your_key_here"
+```
+
+Run
+```bash
+pip install -r requirements.txt
+python download_geojson.py      # fetch Natural Earth shapefiles for maps
+streamlit run app.py
+```
+
+Data
+- `结果文件/` — precomputed SBM/STWR/path snapshot used by the retrieval layer at startup.
+- `data/` — raw input tables.
+
+Agent mode is available as a sidebar toggle ("Agent-driven planning + numerical verification").

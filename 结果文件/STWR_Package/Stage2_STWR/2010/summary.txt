@@ -1,0 +1,22 @@
+=== YEARLY MODEL SUMMARY (2010) ===
+
+[OLS]
+--- OLS Manual Summary ---
+AIC: 79.0316
+BIC: 86.2015
+R2: 0.3478
+
+Coefficients:
+Intercept      : 0.2023 (t: 1.0706, p: 0.2942)
+Industrial structure: -0.2833 (t: -1.6481, p: 0.1114)
+Urbanization rate: 0.4205 (t: 2.3702, p: 0.0255)
+Environmental regulation strength: -0.0133 (t: -0.0532, p: 0.9580)
+Energy structure: 0.4387 (t: 2.3708, p: 0.0254)
+
+
+[GWR]
+AICc=79.23569429535944, R2=0.5773635315948378
+
+
+[STWR]
+AICc=79.235691464841, R2=0.5774

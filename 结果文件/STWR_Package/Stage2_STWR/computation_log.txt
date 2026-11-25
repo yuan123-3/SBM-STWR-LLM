@@ -1,0 +1,102 @@
+Preparing data: numeric conversion & sorting...
+Standardizing (y and X)...
+Time points: [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
+STWR: Searching optimal bandwidth with FULL data...
+STWR bandwidth search failed: name 'cal_coords_list' is not defined, using defaults
+
+=== Processing year: 2004 ===
+STWR: Fitting with accumulated data (n_slices=1, bw=50.0000)...
+Year 2004: STWR params shape=(31, 5), resid shape=(31,)
+Year 2004: STWR R2=0.3825, RSS=15.7038
+
+=== Processing year: 2005 ===
+STWR: Fitting with accumulated data (n_slices=2, bw=50.0000)...
+Year 2005: STWR params shape=(31, 5), resid shape=(31,)
+Year 2005: STWR R2=0.2671, RSS=17.0562
+
+=== Processing year: 2006 ===
+STWR: Fitting with accumulated data (n_slices=3, bw=50.0000)...
+Year 2006: STWR params shape=(31, 5), resid shape=(31,)
+Year 2006: STWR R2=0.5357, RSS=9.1999
+
+=== Processing year: 2007 ===
+STWR: Fitting with accumulated data (n_slices=4, bw=50.0000)...
+Year 2007: STWR params shape=(31, 5), resid shape=(31,)
+Year 2007: STWR R2=0.5064, RSS=11.3115
+
+=== Processing year: 2008 ===
+STWR: Fitting with accumulated data (n_slices=5, bw=50.0000)...
+Year 2008: STWR params shape=(31, 5), resid shape=(31,)
+Year 2008: STWR R2=0.5887, RSS=8.3807
+
+=== Processing year: 2009 ===
+STWR: Fitting with accumulated data (n_slices=6, bw=50.0000)...
+Year 2009: STWR params shape=(31, 5), resid shape=(31,)
+Year 2009: STWR R2=0.5261, RSS=8.8995
+
+=== Processing year: 2010 ===
+STWR: Fitting with accumulated data (n_slices=7, bw=50.0000)...
+Year 2010: STWR params shape=(31, 5), resid shape=(31,)
+Year 2010: STWR R2=0.5774, RSS=10.9039
+
+=== Processing year: 2011 ===
+STWR: Fitting with accumulated data (n_slices=8, bw=50.0000)...
+Year 2011: STWR params shape=(31, 5), resid shape=(31,)
+Year 2011: STWR R2=0.4633, RSS=20.3314
+
+=== Processing year: 2012 ===
+STWR: Fitting with accumulated data (n_slices=9, bw=50.0000)...
+Year 2012: STWR params shape=(31, 5), resid shape=(31,)
+Year 2012: STWR R2=0.3491, RSS=21.9063
+
+=== Processing year: 2013 ===
+STWR: Fitting with accumulated data (n_slices=10, bw=50.0000)...
+Year 2013: STWR params shape=(31, 5), resid shape=(31,)
+Year 2013: STWR R2=0.3623, RSS=21.8428
+
+=== Processing year: 2014 ===
+STWR: Fitting with accumulated data (n_slices=11, bw=50.0000)...
+Year 2014: STWR params shape=(31, 5), resid shape=(31,)
+Year 2014: STWR R2=0.4809, RSS=15.9274
+
+=== Processing year: 2015 ===
+STWR: Fitting with accumulated data (n_slices=12, bw=50.0000)...
+Year 2015: STWR params shape=(31, 5), resid shape=(31,)
+Year 2015: STWR R2=0.4909, RSS=12.2041
+
+=== Processing year: 2016 ===
+STWR: Fitting with accumulated data (n_slices=13, bw=50.0000)...
+Year 2016: STWR params shape=(31, 5), resid shape=(31,)
+Year 2016: STWR R2=0.4115, RSS=20.4597
+
+=== Processing year: 2017 ===
+STWR: Fitting with accumulated data (n_slices=14, bw=50.0000)...
+Year 2017: STWR params shape=(31, 5), resid shape=(31,)
+Year 2017: STWR R2=0.5208, RSS=13.2869
+
+=== Processing year: 2018 ===
+STWR: Fitting with accumulated data (n_slices=15, bw=50.0000)...
+Year 2018: STWR params shape=(31, 5), resid shape=(31,)
+Year 2018: STWR R2=0.4782, RSS=14.2376
+
+=== Processing year: 2019 ===
+STWR: Fitting with accumulated data (n_slices=16, bw=50.0000)...
+Year 2019: STWR params shape=(31, 5), resid shape=(31,)
+Year 2019: STWR R2=0.5223, RSS=14.8935
+
+=== Processing year: 2020 ===
+STWR: Fitting with accumulated data (n_slices=17, bw=50.0000)...
+Year 2020: STWR params shape=(31, 5), resid shape=(31,)
+Year 2020: STWR R2=0.6383, RSS=9.8792
+
+=== Processing year: 2021 ===
+STWR: Fitting with accumulated data (n_slices=18, bw=50.0000)...
+Year 2021: STWR params shape=(31, 5), resid shape=(31,)
+Year 2021: STWR R2=0.5066, RSS=17.3849
+
+=== Processing year: 2022 ===
+STWR: Fitting with accumulated data (n_slices=19, bw=50.0000)...
+Year 2022: STWR params shape=(31, 5), resid shape=(31,)
+Year 2022: STWR R2=0.5456, RSS=15.6577
+
+STWR full process completed.

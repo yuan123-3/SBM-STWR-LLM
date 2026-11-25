@@ -557,12 +557,214 @@ def analyze_paths(stwr_data, id_col, time_col, y_col, x_cols, p_threshold, freq_
     if not df_long.empty:
         stats = df_long.groupby('Path').agg(
             Freq=('ID', 'count'), Avg_Eff=('Delta_Y', 'mean')).reset_index()
-        th = max(1, int(len(df_long) * freq_threshold))
+        th = max(1, int(freq_threshold))
         stats = stats[stats['Freq'] >= th].sort_values('Avg_Eff', ascending=False)
     else:
         stats = pd.DataFrame()
 
     return df_wide_result, stats
+
+
+def analyze_path_geography(path_matrix_df, id_col=None):
+    """
+    Analyze the geographic distribution of evolution paths.
+    
+    Returns:
+        1. path_by_region: DataFrame with each region's historical paths and effects
+        2. path_frequency: DataFrame with path frequency statistics across all regions
+        3. time_path_stats: DataFrame with path statistics by time period
+        4. region_query_result: Function to query specific region's history
+    """
+    if path_matrix_df is None or (hasattr(path_matrix_df, 'empty') and path_matrix_df.empty):
+        return None, None, None, None
+    
+    if not isinstance(path_matrix_df, pd.DataFrame):
+        return None, None, None, None
+    
+    # Detect the actual ID column: prefer 'ID', then id_col parameter, then first non-Path/non-DeltaEff column
+    actual_id_col = None
+    if 'ID' in path_matrix_df.columns:
+        actual_id_col = 'ID'
+    elif id_col and id_col in path_matrix_df.columns:
+        actual_id_col = id_col
+    else:
+        for c in path_matrix_df.columns:
+            if not c.startswith('Path_') and not c.startswith('DeltaEff_'):
+                actual_id_col = c
+                break
+    
+    if actual_id_col is None:
+        return None, None, None, None
+    
+    path_cols = [c for c in path_matrix_df.columns if c.startswith('Path_')]
+    eff_cols = [c for c in path_matrix_df.columns if c.startswith('DeltaEff_')]
+    
+    if not path_cols:
+        return None, None, None, None
+    
+    # 1. Analyze each region's historical paths
+    region_records = []
+    for idx, row in path_matrix_df.iterrows():
+        try:
+            region = row[actual_id_col]
+        except (KeyError, TypeError):
+            continue
+        for i, path_col in enumerate(path_cols):
+            if path_col in path_matrix_df.columns:
+                path_val = row.get(path_col, None)
+                eff_val = row.get(eff_cols[i], None) if i < len(eff_cols) else None
+                time_period = path_col.replace('Path_', '')
+                if pd.notna(path_val) and str(path_val) != 'None -> None':
+                    region_records.append({
+                        'Region': region,
+                        'TimePeriod': time_period,
+                        'Path': path_val,
+                        'DeltaEfficiency': eff_val
+                    })
+    
+    path_by_region = pd.DataFrame(region_records)
+    
+    # 2. Calculate path frequency across all regions
+    if not path_by_region.empty:
+        path_frequency = path_by_region.groupby('Path').agg(
+            RegionCount=('Region', 'nunique'),
+            TotalOccurrences=('Region', 'count'),
+            AvgEfficiency=('DeltaEfficiency', 'mean'),
+            MinEfficiency=('DeltaEfficiency', 'min'),
+            MaxEfficiency=('DeltaEfficiency', 'max')
+        ).reset_index().sort_values('TotalOccurrences', ascending=False)
+    else:
+        path_frequency = pd.DataFrame()
+    
+    # 3. Calculate path statistics by time period
+    if not path_by_region.empty:
+        time_path_stats = path_by_region.groupby(['TimePeriod', 'Path']).agg(
+            RegionCount=('Region', 'nunique'),
+            TotalOccurrences=('Region', 'count'),
+            AvgEfficiency=('DeltaEfficiency', 'mean'),
+            Regions=('Region', lambda x: ', '.join(x.unique()[:5]))  # Top 5 regions
+        ).reset_index().sort_values(['TimePeriod', 'TotalOccurrences'], ascending=[True, False])
+    else:
+        time_path_stats = pd.DataFrame()
+    
+    # 4. Function to query specific region's history
+    def query_region(region_name):
+        if path_by_region.empty:
+            return None
+        region_data = path_by_region[path_by_region['Region'] == region_name]
+        if region_data.empty:
+            return None
+        
+        # Get most frequent path for this region
+        path_counts = region_data['Path'].value_counts()
+        most_frequent_path = path_counts.index[0] if not path_counts.empty else None
+        most_frequent_count = path_counts.iloc[0] if not path_counts.empty else 0
+        
+        # Get average efficiency for most frequent path
+        if most_frequent_path:
+            path_eff = region_data[region_data['Path'] == most_frequent_path]['DeltaEfficiency']
+            avg_eff = path_eff.mean() if not path_eff.empty else 0
+        else:
+            avg_eff = 0
+        
+        return {
+            'region': region_name,
+            'total_records': len(region_data),
+            'most_frequent_path': most_frequent_path,
+            'most_frequent_count': most_frequent_count,
+            'avg_efficiency': avg_eff,
+            'all_paths': region_data[['TimePeriod', 'Path', 'DeltaEfficiency']].to_dict('records')
+        }
+    
+    return path_by_region, path_frequency, time_path_stats, query_region
+
+
+def prepare_path_geography_data(path_matrix_df, id_col=None, target_year=None, target_region=None):
+    """
+    Prepare data for path geography visualization.
+    
+    Args:
+        path_matrix_df: Path matrix DataFrame
+        id_col: ID column name (auto-detects if None)
+        target_year: Specific time period to analyze (e.g., '2015-2018')
+        target_region: Specific region to analyze (e.g., 'Fujian')
+    
+    Returns:
+        Dictionary with visualization data
+    """
+    if path_matrix_df is None or path_matrix_df.empty:
+        return None
+    
+    # Auto-detect ID column
+    if 'ID' in path_matrix_df.columns:
+        actual_id_col = 'ID'
+    elif id_col and id_col in path_matrix_df.columns:
+        actual_id_col = id_col
+    else:
+        actual_id_col = path_matrix_df.columns[0]
+    
+    path_cols = [c for c in path_matrix_df.columns if c.startswith('Path_')]
+    eff_cols = [c for c in path_matrix_df.columns if c.startswith('DeltaEff_')]
+    
+    result = {
+        'all_regions': [],
+        'path_summary': {},
+        'time_period_data': {},
+        'region_query': {}
+    }
+    
+    # Process all regions
+    for _, row in path_matrix_df.iterrows():
+        region = row[actual_id_col]
+        region_info = {'region': region, 'paths': []}
+        
+        for i, path_col in enumerate(path_cols):
+            path_val = row[path_col]
+            eff_val = row[eff_cols[i]] if i < len(eff_cols) else None
+            time_period = path_col.replace('Path_', '')
+            
+            if pd.notna(path_val) and path_val != 'None -> None':
+                region_info['paths'].append({
+                    'time_period': time_period,
+                    'path': path_val,
+                    'delta_efficiency': eff_val
+                })
+        
+        result['all_regions'].append(region_info)
+    
+    # Calculate path summary
+    all_paths = []
+    for region_info in result['all_regions']:
+        for path_info in region_info['paths']:
+            all_paths.append(path_info['path'])
+    
+    if all_paths:
+        path_counts = pd.Series(all_paths).value_counts()
+        result['path_summary'] = {
+            'paths': path_counts.index.tolist(),
+            'counts': path_counts.values.tolist(),
+            'percentages': (path_counts.values / len(all_paths) * 100).tolist()
+        }
+    
+    # Process specific time period
+    if target_year:
+        time_data = {'regions': [], 'paths': [], 'effects': []}
+        for region_info in result['all_regions']:
+            for path_info in region_info['paths']:
+                if path_info['time_period'] == target_year:
+                    time_data['regions'].append(region_info['region'])
+                    time_data['paths'].append(path_info['path'])
+                    time_data['effects'].append(path_info['delta_efficiency'])
+        result['time_period_data'][target_year] = time_data
+    
+    # Process specific region
+    if target_region:
+        for region_info in result['all_regions']:
+            if region_info['region'] == target_region:
+                result['region_query'][target_region] = region_info['paths']
+                break
+    
+    return result
 
 
 def prepare_sankey_data(path_matrix_df):
@@ -588,9 +790,12 @@ def prepare_sankey_data(path_matrix_df):
 
     # --- Macaron palette ---
     macaron_colors = [
-        "rgba(255, 183, 197, 0.8)", "rgba(178, 223, 238, 0.8)",
-        "rgba(193, 255, 193, 0.8)", "rgba(255, 246, 143, 0.8)",
-        "rgba(230, 230, 250, 0.8)", "rgba(255, 218, 185, 0.8)"
+        "rgba(168, 216, 234, 0.8)", "rgba(170, 150, 218, 0.8)",
+        "rgba(252, 186, 211, 0.8)", "rgba(181, 234, 215, 0.8)",
+        "rgba(255, 218, 193, 0.8)", "rgba(226, 240, 203, 0.8)",
+        "rgba(213, 196, 240, 0.8)", "rgba(249, 197, 209, 0.8)",
+        "rgba(199, 206, 234, 0.8)", "rgba(230, 230, 250, 0.8)",
+        "rgba(255, 218, 185, 0.8)", "rgba(152, 251, 152, 0.8)",
     ]
     factor_color_map = {f: macaron_colors[i % len(macaron_colors)] for i, f in enumerate(sorted_factors)}
     # Short codes for nodes (A, B, C, ...)
@@ -629,3 +834,49 @@ def prepare_sankey_data(path_matrix_df):
             })
 
     return node_labels, pd.DataFrame(links_data), unique_years, node_colors, legend_map
+
+
+# ==========================================
+# 5. Result metadata & validation (read-only helpers for the agent layer)
+# ==========================================
+def build_result_metadata(model, region_col, time_col, result_df, parameters=None, extra=None):
+    """Describe an existing result so the agent can decide whether it is usable."""
+    if result_df is None or len(result_df) == 0:
+        return {"model": model, "status": "missing", "row_count": 0}
+    regions = []
+    if region_col in result_df.columns:
+        regions = sorted(result_df[region_col].dropna().astype(str).unique().tolist())
+    years = []
+    if time_col in result_df.columns:
+        try:
+            years = [int(v) for v in pd.to_numeric(result_df[time_col], errors="coerce").dropna().unique()]
+        except Exception:
+            years = []
+    meta = {
+        "model": model,
+        "status": "success",
+        "region_column": region_col,
+        "time_column": time_col,
+        "row_count": int(len(result_df)),
+        "regions": regions,
+        "year_range": [min(years), max(years)] if years else [],
+        "parameters": parameters or {},
+    }
+    if extra:
+        meta.update(extra)
+    return meta
+
+
+def validate_result(df, required_columns):
+    """Return (ok, message). Used before feeding results into the RAG layer."""
+    if df is None or getattr(df, "empty", True):
+        return False, "Empty result"
+    missing = [c for c in required_columns if c not in df.columns]
+    if missing:
+        return False, f"Missing columns: {missing}"
+    try:
+        if df[list(required_columns)].isna().any().any():
+            return False, "Missing values detected in required columns"
+    except Exception:
+        pass
+    return True, "Valid"

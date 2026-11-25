@@ -153,3 +153,40 @@ Step 3 完成后可下载省份演化矩阵和路径统计表。
 - 逐年逐省份主导因子判定（p < 阈值且 |系数| 最大）
 - 相邻年份转移矩阵（如 `Industrial+ → Energy-`）
 - 频率统计 + 桑基图可视化
+
+
+---
+
+## v2 更新：RAG 检索 + Agent 调度 + 数值核验
+
+新增模块
+- `retrieval.py` — 省/年份精细检索、稳定证据 ID、JSON 证据序列化。
+- `agent_layer.py` — LLM 规划（JSON 任务计划）+ 校验后的工具注册表与执行器。
+- `verification.py` — 数值声明抽取、确定性核验、答案修正。
+- `stwr_multislice.py` — 正确的多切片 STWR（时间核生效）。
+- `prompts.py` — 检索/分析/综合/输出契约提示词。
+
+模型与 API Key
+问答使用 DeepSeek-Chat（OpenAI 兼容接口）。**密钥不写入仓库**：用环境变量或本地 `local_secrets.py`（已被 .gitignore 忽略）。
+
+```bash
+export DEEPSEEK_API_KEY=你的key
+```
+
+`local_secrets.py`：
+```python
+DEEPSEEK_API_KEY = "你的key"
+```
+
+运行
+```bash
+pip install -r requirements.txt
+python download_geojson.py   # 下载地图所需 shapefile
+streamlit run app.py
+```
+
+数据
+- `结果文件/` — 预计算的 SBM/STWR/路径快照，检索层启动时读取。
+- `data/` — 原始输入表。
+
+Agent 模式：侧边栏勾选 "Agent-driven planning + numerical verification"。

@@ -1,0 +1,22 @@
+=== YEARLY MODEL SUMMARY (2014) ===
+
+[OLS]
+--- OLS Manual Summary ---
+AIC: 88.5868
+BIC: 95.7567
+R2: 0.2536
+
+Coefficients:
+Intercept      : -0.2931 (t: -1.5972, p: 0.1223)
+Industrial structure: -0.2776 (t: -1.3874, p: 0.1771)
+Urbanization rate: 0.2812 (t: 1.1838, p: 0.2472)
+Environmental regulation strength: 0.3668 (t: 2.5132, p: 0.0185)
+Energy structure: 0.3234 (t: 1.5853, p: 0.1250)
+
+
+[GWR]
+AICc=91.75150673015276, R2=0.48089072469415317
+
+
+[STWR]
+AICc=91.75150728550108, R2=0.4809
