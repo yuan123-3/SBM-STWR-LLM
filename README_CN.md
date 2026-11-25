@@ -190,3 +190,5 @@ streamlit run app.py
 - `data/` — 原始输入表。
 
 Agent 模式：侧边栏勾选 "Agent-driven planning + numerical verification"。
+
+> 结果快照以 `结果文件.zip` 形式提供，首次运行会自动解压（`结果文件/` 已被 .gitignore 忽略）。

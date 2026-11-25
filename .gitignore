@@ -46,3 +46,6 @@ config.local.py
 
 # Local secrets (never commit)
 local_secrets.py
+
+# Extracted result snapshot (shipped as 结果文件.zip)
+结果文件/

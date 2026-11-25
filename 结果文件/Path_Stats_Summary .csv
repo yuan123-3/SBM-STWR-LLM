@@ -1,9 +1,0 @@
-﻿Path,Freq,Avg_Eff
-Industrial structure- -> Urbanization rate+,40,0.04851825680142624
-Environmental regulation strength+ -> Urbanization rate+,28,0.013623995781568855
-Urbanization rate+ -> Industrial structure-,14,0.010837585408927677
-Urbanization rate+ -> Urbanization rate+,378,0.005673845824240263
-Energy structure+ -> Energy structure+,18,0.00424635204589426
-Industrial structure- -> Industrial structure-,15,-0.004730808300622461
-Energy structure+ -> Urbanization rate+,10,-0.00917348421232984
-Urbanization rate+ -> Environmental regulation strength+,28,-0.07012872663330487

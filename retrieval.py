@@ -19,6 +19,20 @@ import re
 import pandas as pd
 
 _HERE = Path(__file__).resolve().parent
+
+# The result snapshot may be shipped as 结果文件.zip (keeps the repo slim).
+# If the folder is missing, extract it next to this file on first import.
+_SNAP = _HERE / "结果文件"
+if not _SNAP.exists():
+    _ZIP = _HERE / "结果文件.zip"
+    if _ZIP.exists():
+        try:
+            import zipfile as _zf
+            with _zf.ZipFile(_ZIP) as _z:
+                _z.extractall(_HERE)
+        except Exception:
+            pass
+
 # when the code lives in a subfolder, look for the data one level up
 ROOT = _HERE if (_HERE / "结果文件").exists() else _HERE.parent
 RES = ROOT / "结果文件"

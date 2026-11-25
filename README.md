@@ -195,3 +195,5 @@ Data
 - `data/` — raw input tables.
 
 Agent mode is available as a sidebar toggle ("Agent-driven planning + numerical verification").
+
+> The result snapshot is shipped as `结果文件.zip` and is auto-extracted on first run (`结果文件/` is git-ignored).
