@@ -164,7 +164,6 @@ New modules
 - `retrieval.py` — fine-grained province/year retrieval, stable evidence IDs, JSON evidence serialization.
 - `agent_layer.py` — LLM planner (JSON task plan) + validated tool registry + executor.
 - `verification.py` — numerical claim extraction, deterministic verification, and answer repair.
-- `stwr_multislice.py` — correct multi-slice STWR (temporal kernel active).
 - `prompts.py` — retrieval/analysis/synthesis/output-contract prompts.
 
 Model / API key

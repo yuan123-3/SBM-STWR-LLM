@@ -163,7 +163,6 @@ Step 3 完成后可下载省份演化矩阵和路径统计表。
 - `retrieval.py` — 省/年份精细检索、稳定证据 ID、JSON 证据序列化。
 - `agent_layer.py` — LLM 规划（JSON 任务计划）+ 校验后的工具注册表与执行器。
 - `verification.py` — 数值声明抽取、确定性核验、答案修正。
-- `stwr_multislice.py` — 正确的多切片 STWR（时间核生效）。
 - `prompts.py` — 检索/分析/综合/输出契约提示词。
 
 模型与 API Key
